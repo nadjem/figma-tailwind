@@ -1,26 +1,49 @@
+//import _ from 'lodash';
+import getTextStyles from './figma/textStyles';
+import getPaintStyles from './figma/paintStyles';
+import getEffectStyles from './figma/effectStyles';
+//import getNodeStyles from './figma/nodeStyles';
+
 figma.showUI(__html__);
 
+let config = {
+    project: '',
+    prefix: '',
+    colors: [],
+    gradientColors: [],
+    fontSize: [],
+    fontFamily: [],
+    boxShadow: [],
+    // borderRadius: [],
+};
+
 figma.ui.onmessage = (msg) => {
-    if (msg.type === 'create-rectangles') {
-        const nodes = [];
+    if (msg.type === 'get-info') {
+        const {finalSizes, finalFamilies} = getTextStyles();
+        const textStyles = figma.getLocalTextStyles();
+        const {colors, gradientColors} = getPaintStyles();
+        const {shadows} = getEffectStyles();
+        // const {finalRadii} = getNodeStyles();
+        config.project = figma.root.name;
+        config.prefix = msg.prefix;
+        config.fontSize.push(...finalSizes);
+        config.fontFamily.push(...finalFamilies);
+        config.colors.push(...colors);
+        config.gradientColors.push(...gradientColors);
+        config.boxShadow.push(...shadows);
+        // config.borderRadius.push(...finalRadii);
 
-        for (let i = 0; i < msg.count; i++) {
-            const rect = figma.createRectangle();
-            rect.x = i * 150;
-            rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-            figma.currentPage.appendChild(rect);
-            nodes.push(rect);
-        }
-
-        figma.currentPage.selection = nodes;
-        figma.viewport.scrollAndZoomIntoView(nodes);
-
-        // This is how figma responds back to the ui
         figma.ui.postMessage({
-            type: 'create-rectangles',
-            message: `Created ${msg.count} Rectangles`,
+            type: 'get-info',
+            message: {result: `info ready`, data: config},
         });
+    } else if (msg.type === 'close') {
+        figma.ui.postMessage({
+            type: 'close',
+            message: {result: `close from plugin`},
+        });
+        setTimeout(() => {
+            figma.closePlugin();
+        }, 100);
     }
-
-    figma.closePlugin();
 };

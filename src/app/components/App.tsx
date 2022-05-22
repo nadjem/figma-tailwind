@@ -1,45 +1,67 @@
 import * as React from 'react';
 import '../styles/ui.css';
-
+import exporter from '../../plugin/figma/exportFile';
+//import tailwind from '../assets/TailwindLogo.png';
+/* import tailwind from '../assets/TailwindLogo';
+import figma from '../assets/FigmaLogo.png'; */
 declare function require(path: string): any;
-
 const App = ({}) => {
+    const [ready, setReady] = React.useState(false);
     const textbox = React.useRef<HTMLInputElement>(undefined);
-
-    const countRef = React.useCallback((element: HTMLInputElement) => {
-        if (element) element.value = '5';
-        textbox.current = element;
+    const [data, setData] = React.useState({});
+    const [prefixTxt, setPrefixTxt] = React.useState('');
+    const prefix = React.useCallback((element: HTMLInputElement) => {
+        if (element) textbox.current = element;
     }, []);
 
     const onCreate = () => {
-        const count = parseInt(textbox.current.value, 10);
-        parent.postMessage({pluginMessage: {type: 'create-rectangles', count}}, '*');
+        const prefix = textbox.current.value;
+        parent.postMessage({pluginMessage: {type: 'get-info', prefix}}, '*');
     };
 
     const onCancel = () => {
-        parent.postMessage({pluginMessage: {type: 'cancel'}}, '*');
+        parent.postMessage({pluginMessage: {type: 'close'}}, '*');
     };
+    const onExport = () => {
+        exporter(data);
+    };
+    const handleInput = (e) => {
+        setPrefixTxt(e.target.value);
+    };
+    React.useEffect(() => {
+        return () => {};
+    }, [prefixTxt]);
 
     React.useEffect(() => {
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const {type, message} = event.data.pluginMessage;
-            if (type === 'create-rectangles') {
-                console.log(`Figma Says: ${message}`);
+            if (type === 'get-info') {
+                /* console.log(`Figma Says: ${message.result}`);
+                console.log(message.data); */
+                setReady(true);
+                setData(message.data);
+            } else if (type === 'close') {
+                setReady(false);
+                /* console.log(`Figma Says: ${message.result}`); */
             }
         };
     }, []);
 
     return (
         <div>
-            <img src={require('../assets/logo.svg')} />
-            <h2>Rectangle Creator</h2>
             <p>
-                Count: <input ref={countRef} />
+                set class prefix: <input ref={prefix} onChange={handleInput} />
             </p>
-            <button id="create" onClick={onCreate}>
-                Create
-            </button>
+            {!ready ? (
+                <button disabled={!prefixTxt.length} id="create" onClick={onCreate}>
+                    Get project info
+                </button>
+            ) : (
+                <button id="create" onClick={onExport}>
+                    export
+                </button>
+            )}
             <button onClick={onCancel}>Cancel</button>
         </div>
     );
