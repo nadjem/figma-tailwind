@@ -14,9 +14,7 @@ let config = {
     fontSize: [],
     fontFamily: [],
     boxShadow: [],
-    borderRadius: [],
-    baseFontSize: false,
-    groupColor: false,
+    // borderRadius: [],
 };
 
 figma.ui.onmessage = (msg) => {
@@ -26,8 +24,6 @@ figma.ui.onmessage = (msg) => {
         const {colors, gradientColors} = getPaintStyles();
         const {shadows} = getEffectStyles();
         // const {finalRadii} = getNodeStyles();
-
-        console.log({textStyles});
         config.project = figma.root.name;
         config.prefix = msg.prefix;
         config.fontSize.push(...finalSizes);

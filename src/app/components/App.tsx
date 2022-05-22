@@ -9,9 +9,9 @@ const App = ({}) => {
     const [ready, setReady] = React.useState(false);
     const textbox = React.useRef<HTMLInputElement>(undefined);
     const [data, setData] = React.useState({});
+    const [prefixTxt, setPrefixTxt] = React.useState('');
     const prefix = React.useCallback((element: HTMLInputElement) => {
-        if (element) console.log(element.value);
-        textbox.current = element;
+        if (element) textbox.current = element;
     }, []);
 
     const onCreate = () => {
@@ -25,23 +25,25 @@ const App = ({}) => {
     const onExport = () => {
         exporter(data);
     };
+    const handleInput = (e) => {
+        setPrefixTxt(e.target.value);
+    };
     React.useEffect(() => {
-        console.log({ready: ready});
         return () => {};
-    }, [ready]);
+    }, [prefixTxt]);
 
     React.useEffect(() => {
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const {type, message} = event.data.pluginMessage;
             if (type === 'get-info') {
-                console.log(`Figma Says: ${message.result}`);
-                console.log(message.data);
+                /* console.log(`Figma Says: ${message.result}`);
+                console.log(message.data); */
                 setReady(true);
                 setData(message.data);
             } else if (type === 'close') {
                 setReady(false);
-                console.log(`Figma Says: ${message.result}`);
+                /* console.log(`Figma Says: ${message.result}`); */
             }
         };
     }, []);
@@ -49,10 +51,10 @@ const App = ({}) => {
     return (
         <div>
             <p>
-                set class prefix: <input ref={prefix} />
+                set class prefix: <input ref={prefix} onChange={handleInput} />
             </p>
             {!ready ? (
-                <button id="create" onClick={onCreate}>
+                <button disabled={!prefixTxt.length} id="create" onClick={onCreate}>
                     Get project info
                 </button>
             ) : (
