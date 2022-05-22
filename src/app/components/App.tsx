@@ -1,19 +1,20 @@
 import * as React from 'react';
 import '../styles/ui.css';
-import tailwind from '../assets/TailwindLogo.png';
-import figma from '../assets/FigmaLogo.png';
+import exporter from '../../plugin/figma/exportFile';
+//import tailwind from '../assets/TailwindLogo.png';
+/* import tailwind from '../assets/TailwindLogo';
+import figma from '../assets/FigmaLogo.png'; */
 declare function require(path: string): any;
-
 const App = ({}) => {
+    const [ready, setReady] = React.useState(false);
     const textbox = React.useRef<HTMLInputElement>(undefined);
-
+    const [data, setData] = React.useState({});
     const prefix = React.useCallback((element: HTMLInputElement) => {
         if (element) console.log(element.value);
         textbox.current = element;
     }, []);
 
     const onCreate = () => {
-        console.log(textbox.current.value);
         const prefix = textbox.current.value;
         parent.postMessage({pluginMessage: {type: 'get-info', prefix}}, '*');
     };
@@ -21,6 +22,13 @@ const App = ({}) => {
     const onCancel = () => {
         parent.postMessage({pluginMessage: {type: 'close'}}, '*');
     };
+    const onExport = () => {
+        exporter(data);
+    };
+    React.useEffect(() => {
+        console.log({ready: ready});
+        return () => {};
+    }, [ready]);
 
     React.useEffect(() => {
         // This is how we read messages sent from the plugin controller
@@ -29,7 +37,10 @@ const App = ({}) => {
             if (type === 'get-info') {
                 console.log(`Figma Says: ${message.result}`);
                 console.log(message.data);
+                setReady(true);
+                setData(message.data);
             } else if (type === 'close') {
+                setReady(false);
                 console.log(`Figma Says: ${message.result}`);
             }
         };
@@ -37,17 +48,18 @@ const App = ({}) => {
 
     return (
         <div>
-            <div className="logos">
-                <img src={figma} />
-                to
-                <img src={tailwind} />
-            </div>
             <p>
                 set class prefix: <input ref={prefix} />
             </p>
-            <button id="create" onClick={onCreate}>
-                Get project info
-            </button>
+            {!ready ? (
+                <button id="create" onClick={onCreate}>
+                    Get project info
+                </button>
+            ) : (
+                <button id="create" onClick={onExport}>
+                    export
+                </button>
+            )}
             <button onClick={onCancel}>Cancel</button>
         </div>
     );

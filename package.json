@@ -9,10 +9,23 @@
 		"prettier:format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,json}' "
 	},
 	"dependencies": {
+		"@babel/polyfill": "^7.12.1",
+		"core-js": "^3.8.1",
+		"dotenv": "^7.0.0",
+		"file-saver": "^2.0.5",
+		"html-loader": "^0.5.5",
+		"html-webpack-inline-source-plugin": "0.0.10",
+		"livereload": "^0.7.0",
 		"materialize-css": "^1.0.0",
+		"prism-react-renderer": "^1.1.1",
+		"prop-types": "^15.7.2",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
-		"react-materialize": "^3.10.0"
+		"react-materialize": "^3.10.0",
+		"react-router-dom": "^5.2.0",
+		"reactn": "^2.2.7",
+		"svg4everybody": "^2.1.9",
+		"use-force-update": "^1.0.7"
 	},
 	"devDependencies": {
 		"@figma/plugin-typings": "^1.24.0",
