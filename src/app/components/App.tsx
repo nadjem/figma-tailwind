@@ -1,44 +1,52 @@
 import * as React from 'react';
 import '../styles/ui.css';
-
+import tailwind from '../assets/TailwindLogo.png';
+import figma from '../assets/FigmaLogo.png';
 declare function require(path: string): any;
 
 const App = ({}) => {
     const textbox = React.useRef<HTMLInputElement>(undefined);
 
-    const countRef = React.useCallback((element: HTMLInputElement) => {
-        if (element) element.value = '5';
+    const prefix = React.useCallback((element: HTMLInputElement) => {
+        if (element) console.log(element.value);
         textbox.current = element;
     }, []);
 
     const onCreate = () => {
-        const count = parseInt(textbox.current.value, 10);
-        parent.postMessage({pluginMessage: {type: 'create-rectangles', count}}, '*');
+        console.log(textbox.current.value);
+        const prefix = textbox.current.value;
+        parent.postMessage({pluginMessage: {type: 'get-info', prefix}}, '*');
     };
 
     const onCancel = () => {
-        parent.postMessage({pluginMessage: {type: 'cancel'}}, '*');
+        parent.postMessage({pluginMessage: {type: 'close'}}, '*');
     };
 
     React.useEffect(() => {
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const {type, message} = event.data.pluginMessage;
-            if (type === 'create-rectangles') {
-                console.log(`Figma Says: ${message}`);
+            if (type === 'get-info') {
+                console.log(`Figma Says: ${message.result}`);
+                console.log(message.data);
+            } else if (type === 'close') {
+                console.log(`Figma Says: ${message.result}`);
             }
         };
     }, []);
 
     return (
         <div>
-            <img src={require('../assets/logo.svg')} />
-            <h2>Rectangle Creator</h2>
+            <div className="logos">
+                <img src={figma} />
+                to
+                <img src={tailwind} />
+            </div>
             <p>
-                Count: <input ref={countRef} />
+                set class prefix: <input ref={prefix} />
             </p>
             <button id="create" onClick={onCreate}>
-                Create
+                Get project info
             </button>
             <button onClick={onCancel}>Cancel</button>
         </div>

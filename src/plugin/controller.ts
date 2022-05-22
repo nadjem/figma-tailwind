@@ -1,26 +1,55 @@
+import _ from 'lodash';
+
 figma.showUI(__html__);
 
+let config = {
+    project: '',
+    prefix: '',
+    fonts: [],
+    colors: [],
+};
+
 figma.ui.onmessage = (msg) => {
-    if (msg.type === 'create-rectangles') {
-        const nodes = [];
-
-        for (let i = 0; i < msg.count; i++) {
-            const rect = figma.createRectangle();
-            rect.x = i * 150;
-            rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-            figma.currentPage.appendChild(rect);
-            nodes.push(rect);
-        }
-
-        figma.currentPage.selection = nodes;
-        figma.viewport.scrollAndZoomIntoView(nodes);
-
-        // This is how figma responds back to the ui
-        figma.ui.postMessage({
-            type: 'create-rectangles',
-            message: `Created ${msg.count} Rectangles`,
+    if (msg.type === 'get-info') {
+        const textStyles = figma.getLocalTextStyles();
+        console.log({textStyles});
+        textStyles.map((text) => {
+            console.log(text.fontSize);
+            console.log(text.description);
         });
-    }
+        figma.currentPage.children.map((nodes) => {
+            console.log(figma.root.name);
+            config.project = figma.root.name;
+            config.prefix = msg.prefix;
+            if (nodes.name === 'Typography') {
+                nodes.children.map((nodesChild) => {
+                    config.fonts.push(nodesChild.children[0].fontSize);
+                });
+            } else if (nodes.name === 'Typographie') {
+                nodes.children.map((nodesChild) => {
+                    nodesChild.children.map((sub) => {
+                        sub.children.map((rows) => {
+                            rows.children.map((row) => {
+                                config.fonts.push(row.fontSize);
+                            });
+                        });
+                    });
+                });
+            }
+        });
 
-    figma.closePlugin();
+        config.fonts = _.uniq(config.fonts).sort();
+        figma.ui.postMessage({
+            type: 'get-info',
+            message: {result: `info ready`, data: config},
+        });
+    } else if (msg.type === 'close') {
+        figma.ui.postMessage({
+            type: 'close',
+            message: {result: `close from plugin`},
+        });
+        setTimeout(() => {
+            figma.closePlugin();
+        }, 100);
+    }
 };
