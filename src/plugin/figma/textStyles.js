@@ -1,10 +1,12 @@
 export default function () {
-    // eslint-disable-next-line
     const textStyles = figma.getLocalTextStyles();
+
     const fontSizes = [];
     const fontFamilies = [];
+    const fontWeight = [];
     const finalSizes = [];
     const finalFamilies = [];
+    const finalWeight = [];
 
     textStyles.forEach((style) => {
         const {family} = style.fontName;

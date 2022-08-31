@@ -5,6 +5,7 @@ export default function (data) {
     let colors = '';
     let shadows = '';
     let fontFamily = '';
+    let radius = '';
     data.fontFamily.map((family) => {
         fontFamily += `             '${data.prefix}-${family.name
             .replaceAll(' ', '-')
@@ -12,7 +13,7 @@ export default function (data) {
             .toLowerCase()}':'${family.value}',\n`;
     });
     data.fontSize.map((font) => {
-        fonts += `             '${data.prefix}-font-${font.value}':'${font.value}px',\n`;
+        fonts += `             '${data.prefix}-${font.value}':'${font.value}px',\n`;
     });
     data.colors.map((color) => {
         colors += `             '${data.prefix}-${color.name
@@ -25,6 +26,9 @@ export default function (data) {
             .replaceAll(' ', '-')
             .replaceAll('/', '-')
             .toLowerCase()}':'${shadow.value}px',\n`;
+    });
+    data.radius.map((r) => {
+        radius += `             '${data.prefix}-${r.name}':'${r.value}px',\n`;
     });
     const base = `module.exports = {
     content: [
@@ -39,12 +43,15 @@ ${fonts}
 ${fontFamily}
       },
       colors: {
-${colors}          
+${colors}
       },
       extend: {
         boxShadow: {
-${shadows}            
-        }
+${shadows}
+        },
+        borderRadius: {
+${radius}
+      },
       }
     }
   }`;
