@@ -13,7 +13,7 @@ export default function (data) {
             .toLowerCase()}':'${family.value}',\n`;
     });
     data.fontSize.map((font) => {
-        fonts += `             '${data.prefix}-font-${font.value}':'${font.value}px',\n`;
+        fonts += `             '${data.prefix}-${font.value}':'${font.value}px',\n`;
     });
     data.colors.map((color) => {
         colors += `             '${data.prefix}-${color.name
