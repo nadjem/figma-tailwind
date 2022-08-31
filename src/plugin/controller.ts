@@ -25,7 +25,6 @@ figma.ui.onmessage = (msg) => {
         const {shadows} = getEffectStyles();
         const {radius} = getRadiusStyle();
         //const {alls} = getAllData()
-        console.log({radius});
         config.project = figma.root.name;
         config.prefix = msg.prefix;
         config.fontSize.push(...finalSizes);

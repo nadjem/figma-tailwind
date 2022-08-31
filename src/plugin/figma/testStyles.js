@@ -3,11 +3,6 @@ export default function () {
     const dropshadow = figma.getLocalEffectStyles();
     const gridStyles = figma.getLocalGridStyles();
     const allData = figma.currentPage.findAll();
-    console.log({dropshadow});
-    //console.clear()
-    /*console.log({dropshadow})
-    console.log({gridStyles})
-    console.log({allData})*/
 
     /**
      * get radius
