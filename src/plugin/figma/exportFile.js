@@ -5,6 +5,7 @@ export default function (data) {
     let colors = '';
     let shadows = '';
     let fontFamily = '';
+    let radius = '';
     data.fontFamily.map((family) => {
         fontFamily += `             '${data.prefix}-${family.name
             .replaceAll(' ', '-')
@@ -26,6 +27,9 @@ export default function (data) {
             .replaceAll('/', '-')
             .toLowerCase()}':'${shadow.value}px',\n`;
     });
+    data.radius.map((r) => {
+        radius += `             '${data.prefix}-${r.name}':'${r.value}px',\n`;
+    });
     const base = `module.exports = {
     content: [
         "./index.html",
@@ -39,12 +43,15 @@ ${fonts}
 ${fontFamily}
       },
       colors: {
-${colors}          
+${colors}
       },
       extend: {
         boxShadow: {
-${shadows}            
-        }
+${shadows}
+        },
+        borderRadius: {
+${radius}
+      },
       }
     }
   }`;

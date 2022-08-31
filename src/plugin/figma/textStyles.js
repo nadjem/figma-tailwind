@@ -1,10 +1,18 @@
 export default function () {
     // eslint-disable-next-line
+    /*const filterdNodes = figma.root.findAll(n => (n.cornerRadius));
+    console.log({filterdNodes})*/
+
     const textStyles = figma.getLocalTextStyles();
+    // const textWeight = figma.root.findAll()
+
     const fontSizes = [];
     const fontFamilies = [];
+    const fontWeight = [];
     const finalSizes = [];
     const finalFamilies = [];
+    const finalWeight = [];
+    //console.log(textWeight)
 
     textStyles.forEach((style) => {
         const {family} = style.fontName;
