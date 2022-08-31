@@ -2,8 +2,7 @@
 import getTextStyles from './figma/textStyles';
 import getPaintStyles from './figma/paintStyles';
 import getEffectStyles from './figma/effectStyles';
-import getRadiusStyle from './figma/radiusStyles';
-// import getAllData from './figma/testStyles';
+//import getNodeStyles from './figma/nodeStyles';
 
 figma.showUI(__html__);
 
@@ -15,16 +14,16 @@ let config = {
     fontSize: [],
     fontFamily: [],
     boxShadow: [],
-    radius: [],
+    // borderRadius: [],
 };
 
 figma.ui.onmessage = (msg) => {
     if (msg.type === 'get-info') {
         const {finalSizes, finalFamilies} = getTextStyles();
+        const textStyles = figma.getLocalTextStyles();
         const {colors, gradientColors} = getPaintStyles();
         const {shadows} = getEffectStyles();
-        const {radius} = getRadiusStyle();
-        //const {alls} = getAllData()
+        // const {finalRadii} = getNodeStyles();
         config.project = figma.root.name;
         config.prefix = msg.prefix;
         config.fontSize.push(...finalSizes);
@@ -32,7 +31,7 @@ figma.ui.onmessage = (msg) => {
         config.colors.push(...colors);
         config.gradientColors.push(...gradientColors);
         config.boxShadow.push(...shadows);
-        config.radius.push(...radius);
+        // config.borderRadius.push(...finalRadii);
 
         figma.ui.postMessage({
             type: 'get-info',

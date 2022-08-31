@@ -8,7 +8,6 @@ export default function () {
     effectStyles.forEach((style) => {
         const shadowStyle = {};
         const {effects, name} = style;
-        console.log(style);
         const styleString = [];
         // Generate css string for each shadow (if it has a color, BACKGROUND_BLUR does not)
         effects.forEach((effect) => {
@@ -25,11 +24,7 @@ export default function () {
         });
         // Create object & push it to shadows
         if (shadowStyle) {
-            console.log({name});
-            let n = name.split('/');
-            n = name.includes('/') ? n[1] : name;
-
-            shadowStyle.name = n;
+            shadowStyle.name = name;
             shadowStyle.value = styleString.join(', ');
             shadows.push(shadowStyle);
         }

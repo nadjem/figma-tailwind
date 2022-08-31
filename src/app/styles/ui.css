@@ -53,35 +53,3 @@ input:focus {
     width: 30px;
     height: 30px;
 }
-
-.simple-spinner {
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.simple-spinner span {
-    display: block;
-    width: 30px;
-    height: 30px;
-    border: 3px solid transparent;
-    border-radius: 50%;
-    border-right-color: rgba(39, 151, 245, 1);
-    border-left-color: rgba(245, 40, 145, 0.8);
-    animation: spinner-anim 0.8s linear infinite;
-}
-
-@keyframes spinner-anim {
-    0% {
-        transform: rotate(0);
-    }
-    60% {
-        transform: rotate(90deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
