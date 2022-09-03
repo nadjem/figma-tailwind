@@ -10,6 +10,7 @@ figma.showUI(__html__);
 let config = {
     project: '',
     prefix: '',
+    px: '',
     colors: [],
     gradientColors: [],
     fontSize: [],
@@ -26,7 +27,8 @@ figma.ui.onmessage = (msg) => {
         const {radius} = getRadiusStyle();
         //const {alls} = getAllData()
         config.project = figma.root.name;
-        config.prefix = msg.prefix;
+        config.prefix = msg.data.prefix;
+        config.px = msg.data.px;
         config.fontSize.push(...finalSizes);
         config.fontFamily.push(...finalFamilies);
         config.colors.push(...colors);
