@@ -6,6 +6,8 @@ export default function (data) {
     let shadows = '';
     let fontFamily = '';
     let radius = '';
+    let px = false;
+    px = data.px;
     data.fontFamily.map((family) => {
         fontFamily += `             '${data.prefix}-${family.name
             .replaceAll(' ', '-')
@@ -36,6 +38,49 @@ export default function (data) {
         "./src/**/*.{vue,js,ts,jsx,tsx}",
         ],
     theme: {
+    ${
+        px
+            ? '' +
+              '  spacing: {\n' +
+              "              px: '1px',\n" +
+              "              0: '0',\n" +
+              "              0.5: ' 0.5px',\n" +
+              "              1: '1px',\n" +
+              "              1.5: '1.5px',\n" +
+              "              2: '2px',\n" +
+              "              2.5: '2.5px',\n" +
+              "              3: '3px',\n" +
+              "              3.5: '3.5px',\n" +
+              "              4: '4px',\n" +
+              "              5: '5px',\n" +
+              "              6: '6px',\n" +
+              "              7: '7px',\n" +
+              "              8: '8px',\n" +
+              "              9: '9px',\n" +
+              "              10: '10px',\n" +
+              "              11: '11px',\n" +
+              "              12: '12px',\n" +
+              "              14: '14px',\n" +
+              "              16: '16px',\n" +
+              "              20: '20px',\n" +
+              "              24: '24px',\n" +
+              "              28: '28px',\n" +
+              "              30: '30px',\n" +
+              "              32: '32px',\n" +
+              "              36: '36px',\n" +
+              "              40: '40px',\n" +
+              "              44: '44px',\n" +
+              "              48: '48px',\n" +
+              "              52: '52px',\n" +
+              "              56: '56px',\n" +
+              "              60: '60px',\n" +
+              "              64: '64px',\n" +
+              "              72: '72px',\n" +
+              "              80: '80px',\n" +
+              "              96: '96px',\n" +
+              '    },'
+            : ''
+    }
       fontSize: {
 ${fonts}
       },
