@@ -1,6 +1,6 @@
 export default function () {
-    const radius = [];
-    const allData = figma.currentPage.findAll();
+    const radius = []
+    const allData = figma.currentPage.findAll()
 
     /**
      * get radius
@@ -11,9 +11,9 @@ export default function () {
                 radius.push({
                     name: r.children[0].name,
                     value: r.cornerRadius,
-                });
-            });
+                })
+            })
         }
-    });
-    return {radius};
+    })
+    return { radius }
 }
