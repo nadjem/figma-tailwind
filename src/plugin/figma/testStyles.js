@@ -7,7 +7,7 @@ export default function () {
 
     allPage.map((page) => {
         if (page.name === 'component.scss') {
-            console.log(page.name)
+            // console.log(page.name)
             let data = {}
             let name = ''
             let components = page.children.filter((p) => p.constructor.name === 'ComponentSetNode')[0]
@@ -33,10 +33,10 @@ export default function () {
                         css += `${data[item]} `
                     }
                 }
-                console.log(`
+                /*console.log(`
                 .${component.parent.name.toLowerCase()}-${name.toLowerCase()}{
                    @apply ${css}
-                }`)
+                }`)*/
                 let rule = `
                 .${component.parent.name.toLowerCase()}-${name.toLowerCase()}{
                    @apply ${css}

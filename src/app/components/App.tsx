@@ -1,6 +1,7 @@
 import * as React from 'react'
 import '../styles/ui.css'
 import exporter from '../../plugin/figma/exportFile'
+import makeTHeme from '../../plugin/figma/exportTheme'
 declare function require(path: string): any
 const App = ({}) => {
     const [ready, setReady] = React.useState(false)
@@ -9,17 +10,19 @@ const App = ({}) => {
     const [data, setData] = React.useState({})
     const [prefixTxt, setPrefixTxt] = React.useState('tkt')
     const [pxTxt, setPxTxt] = React.useState('off')
+    const [themeTxt, setThemeTxt] = React.useState('off')
     const [disabledAll, setDisabledALl] = React.useState(false)
     const prefix = React.useCallback((element: HTMLInputElement) => {
         if (element) textbox.current = element
     }, [])
-
+    // TODO recupérer l'auto layout
     const onCreate = () => {
         setShowLoader(true)
         setTimeout(() => {
             const prefix = textbox.current.value
             const px = pxTxt === 'on'
             const data = {
+                themeTxt,
                 prefix,
                 px,
             }
@@ -32,15 +35,23 @@ const App = ({}) => {
         parent.postMessage({ pluginMessage: { type: 'close' } }, '*')
     }
     const onExport = () => {
-        exporter(data)
+        if (themeTxt === 'on') {
+            makeTHeme(data)
+        } else {
+            exporter(data)
+        }
     }
     const handleInput = (e) => {
         setPrefixTxt(e.target.value)
-        console.log(prefixTxt)
     }
     const handlePxChange = (e) => {
         setPxTxt(e.target.value)
     }
+
+    const handleThemeChange = (e) => {
+        setThemeTxt(e.target.value)
+    }
+
     React.useEffect(() => {
         return () => {}
     }, [prefixTxt])
@@ -54,14 +65,11 @@ const App = ({}) => {
         window.onmessage = (event) => {
             const { type, message } = event.data.pluginMessage
             if (type === 'get-info') {
-                /* console.log(`Figma Says: ${message.result}`);
-                console.log(message.data); */
                 setShowLoader(false)
                 setReady(true)
                 setData(message.data)
             } else if (type === 'close') {
                 setReady(false)
-                /* console.log(`Figma Says: ${message.result}`); */
             }
         }
     }, [])
@@ -76,6 +84,10 @@ const App = ({}) => {
                 <div className={'pixel'}>
                     <label htmlFor="pixel">use pixel size ? </label>
                     <input disabled={disabledAll} id={'pixel'} type="checkbox" onChange={handlePxChange} />
+                </div>
+                <div className={'theme'}>
+                    <label htmlFor="theme">export theme ? </label>
+                    <input disabled={disabledAll} id={'theme'} type="checkbox" onChange={handleThemeChange} />
                 </div>
             </div>
 

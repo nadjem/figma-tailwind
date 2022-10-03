@@ -11,6 +11,7 @@ let config = {
     project: '',
     prefix: '',
     px: '',
+    theme: '',
     colors: [],
     gradientColors: [],
     fontSize: [],
@@ -26,10 +27,11 @@ figma.ui.onmessage = (msg) => {
         const { colors, gradientColors } = getPaintStyles()
         const { shadows } = getEffectStyles()
         const { radius } = getRadiusStyle()
-        // const { alls } = getAllData()
+        const { alls } = getAllData()
         config.project = figma.root.name
         config.prefix = msg.data.prefix
         config.px = msg.data.px
+        config.theme = alls
         config.fontSize.push(...finalSizes)
         config.fontFamily.push(...finalFamilies)
         config.colors.push(...colors)
