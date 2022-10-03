@@ -24,13 +24,26 @@ export default function () {
                 //  - configuration ou nom du parent
 
                 // name = data.configuration
-                name = data[component.parent.name.toLowerCase()]
+                name = data.configuration
                 delete data.configuration
                 let css = ''
+                let i = ''
                 //console.log(data)
                 for (const item in data) {
-                    if (data[item] !== 'none') {
-                        css += `${data[item]} `
+                    if (data[item] !== 'none' && data[item] !== 'enabled') {
+                        if (data[item] !== data[component.parent.name.toLowerCase()]) {
+                            console.log({ parent: component.parent.name })
+                            console.log({ 'data-item': data[item] })
+                            console.log({ item })
+                            console.log(data[item] !== 'none' || data[item] !== 'enabled')
+                            if (item === 'icon') {
+                                i = `   i{
+         @apply ${data[item]};
+        }`
+                            } else {
+                                css += `${data[item]} `
+                            }
+                        }
                     }
                 }
                 /*console.log(`
@@ -38,9 +51,10 @@ export default function () {
                    @apply ${css}
                 }`)*/
                 let rule = `
-                .${component.parent.name.toLowerCase()}-${name.toLowerCase()}{
-                   @apply ${css}
-                }`
+.${component.parent.name.toLowerCase()}-${name.toLowerCase()}{
+   @apply ${css};
+    ${i}
+}`
                 alls.push(rule)
             })
         }
