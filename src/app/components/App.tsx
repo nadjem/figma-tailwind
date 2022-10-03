@@ -1,80 +1,93 @@
-import * as React from 'react';
-import '../styles/ui.css';
-import exporter from '../../plugin/figma/exportFile';
-declare function require(path: string): any;
+import * as React from 'react'
+import '../styles/ui.css'
+import exporter from '../../plugin/figma/exportFile'
+import makeTHeme from '../../plugin/figma/exportTheme'
+declare function require(path: string): any
 const App = ({}) => {
-    const [ready, setReady] = React.useState(false);
-    const [showLoader, setShowLoader] = React.useState(false);
-    const textbox = React.useRef<HTMLInputElement>(undefined);
-    const [data, setData] = React.useState({});
-    const [prefixTxt, setPrefixTxt] = React.useState('');
-    const [pxTxt, setPxTxt] = React.useState('off');
-    const [disabledAll, setDisabledALl] = React.useState(false);
+    const [ready, setReady] = React.useState(false)
+    const [showLoader, setShowLoader] = React.useState(false)
+    const textbox = React.useRef<HTMLInputElement>(undefined)
+    const [data, setData] = React.useState({})
+    const [prefixTxt, setPrefixTxt] = React.useState('tkt')
+    const [pxTxt, setPxTxt] = React.useState('off')
+    const [themeTxt, setThemeTxt] = React.useState('off')
+    const [disabledAll, setDisabledALl] = React.useState(false)
     const prefix = React.useCallback((element: HTMLInputElement) => {
-        if (element) textbox.current = element;
-    }, []);
-
+        if (element) textbox.current = element
+    }, [])
+    // TODO recupérer l'auto layout
     const onCreate = () => {
-        setShowLoader(true);
+        setShowLoader(true)
         setTimeout(() => {
-            const prefix = textbox.current.value;
-            const px = pxTxt === 'on';
+            const prefix = textbox.current.value
+            const px = pxTxt === 'on'
             const data = {
+                themeTxt,
                 prefix,
                 px,
-            };
-            setDisabledALl(true);
-            parent.postMessage({pluginMessage: {type: 'get-info', data}}, '*');
-        }, 500);
-    };
+            }
+            setDisabledALl(true)
+            parent.postMessage({ pluginMessage: { type: 'get-info', data } }, '*')
+        }, 500)
+    }
 
     const onCancel = () => {
-        parent.postMessage({pluginMessage: {type: 'close'}}, '*');
-    };
+        parent.postMessage({ pluginMessage: { type: 'close' } }, '*')
+    }
     const onExport = () => {
-        exporter(data);
-    };
+        if (themeTxt === 'on') {
+            makeTHeme(data)
+        } else {
+            exporter(data)
+        }
+    }
     const handleInput = (e) => {
-        setPrefixTxt(e.target.value);
-    };
+        setPrefixTxt(e.target.value)
+    }
     const handlePxChange = (e) => {
-        setPxTxt(e.target.value);
-    };
-    React.useEffect(() => {
-        return () => {};
-    }, [prefixTxt]);
+        setPxTxt(e.target.value)
+    }
+
+    const handleThemeChange = (e) => {
+        setThemeTxt(e.target.value)
+    }
 
     React.useEffect(() => {
-        return () => {};
-    }, [pxTxt]);
+        return () => {}
+    }, [prefixTxt])
+
+    React.useEffect(() => {
+        return () => {}
+    }, [pxTxt])
 
     React.useEffect(() => {
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
-            const {type, message} = event.data.pluginMessage;
+            const { type, message } = event.data.pluginMessage
             if (type === 'get-info') {
-                /* console.log(`Figma Says: ${message.result}`);
-                console.log(message.data); */
-                setShowLoader(false);
-                setReady(true);
-                setData(message.data);
+                setShowLoader(false)
+                setReady(true)
+                setData(message.data)
             } else if (type === 'close') {
-                setReady(false);
-                /* console.log(`Figma Says: ${message.result}`); */
+                setReady(false)
             }
-        };
-    }, []);
+        }
+    }, [])
 
     return (
         <div className={'container'}>
             <div className={'inputs'}>
                 <div className={'prefix'}>
                     <label htmlFor="prefix">set class prefix:</label>
-                    <input disabled={disabledAll} id={'prefix'} ref={prefix} onChange={handleInput} />
+                    <input disabled={disabledAll} id={'prefix'} ref={prefix} onChange={handleInput} value={prefixTxt} />
                 </div>
                 <div className={'pixel'}>
                     <label htmlFor="pixel">use pixel size ? </label>
                     <input disabled={disabledAll} id={'pixel'} type="checkbox" onChange={handlePxChange} />
+                </div>
+                <div className={'theme'}>
+                    <label htmlFor="theme">export theme ? </label>
+                    <input disabled={disabledAll} id={'theme'} type="checkbox" onChange={handleThemeChange} />
                 </div>
             </div>
 
@@ -97,7 +110,7 @@ const App = ({}) => {
                 </div>
             ) : null}
         </div>
-    );
-};
+    )
+}
 
-export default App;
+export default App
