@@ -26,7 +26,7 @@ jobs:
       run: |
         npm install
         npx webpack --mode=production
-        ls
+        zip -r release_latest.zip *
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.FT_TOKEN }}"
@@ -34,7 +34,4 @@ jobs:
         title: "Release Build"
         prerelease: false
         files: |
-          *
-          /*
-          dist/*
-          node_modules/*
+          release_latest.zip
