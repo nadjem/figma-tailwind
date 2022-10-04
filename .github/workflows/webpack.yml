@@ -35,6 +35,8 @@ jobs:
         prerelease: false
         files: |
           * |
-          /*
+          /* |
+          /dist |
+          /node_module
         
         
