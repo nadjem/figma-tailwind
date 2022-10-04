@@ -32,10 +32,6 @@ export default function () {
                 for (const item in data) {
                     if (data[item] !== 'none' && data[item] !== 'enabled') {
                         if (data[item] !== data[component.parent.name.toLowerCase()]) {
-                            console.log({ parent: component.parent.name })
-                            console.log({ 'data-item': data[item] })
-                            console.log({ item })
-                            console.log(data[item] !== 'none' || data[item] !== 'enabled')
                             if (item === 'icon') {
                                 i = `   i{
          @apply ${data[item]};
@@ -46,15 +42,11 @@ export default function () {
                         }
                     }
                 }
-                /*console.log(`
-                .${component.parent.name.toLowerCase()}-${name.toLowerCase()}{
-                   @apply ${css}
-                }`)*/
                 let rule = `
 .${component.parent.name.toLowerCase()}-${name.toLowerCase()}{
    @apply ${css};
     ${i}
-}`
+}\n`
                 alls.push(rule)
             })
         }
