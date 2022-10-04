@@ -1,12 +1,14 @@
-name: NodeJS with Webpack
+name: Release
 
 on:
-  pull_request:
-    branches: [ "master" ]
+  push:
+    branches:
+      - "master"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  tagged-release:
+    name: "Release"
+    runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
@@ -24,3 +26,12 @@ jobs:
       run: |
         npm install
         npx webpack --mode=production
+        
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.FT_TOKEN }}"
+        prerelease: false
+        files: |
+          *
+        
+        

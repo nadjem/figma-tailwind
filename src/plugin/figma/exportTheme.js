@@ -101,7 +101,18 @@ ${radius}
       }
     }
   }`
+    const zip = JSZip()
+    data.theme[0].replaceAll('tkt', data.prefix)
+    console.log('export theme')
+    const blob2 = new Blob(data.theme, { type: 'text/plain;charset=utf-8' })
 
-    var blob = new Blob([base], { type: 'text/plain;charset=utf-8' })
-    saveAs(blob, 'tailwind.config.js')
+    const blob = new Blob([base], { type: 'text/plain;charset=utf-8' })
+    zip.file('config/tailwind.config.js', blob)
+    zip.file(`theme/theme-${data.prefix}.scss`, blob2)
+
+    zip.generateAsync({ type: 'blob' }).then(function (content) {
+        // see FileSaver.js
+        // saveAs(content, "example.zip");
+        saveAs(content, `${data.prefix}-figma.zip`)
+    })
 }

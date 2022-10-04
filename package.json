@@ -15,6 +15,7 @@
 		"file-saver": "^2.0.5",
 		"html-loader": "^0.5.5",
 		"html-webpack-inline-source-plugin": "0.0.10",
+		"jszip": "^3.10.1",
 		"livereload": "^0.7.0",
 		"materialize-css": "^1.0.0",
 		"prism-react-renderer": "^1.1.1",

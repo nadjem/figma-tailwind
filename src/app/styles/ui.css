@@ -89,6 +89,12 @@ input:focus {
     align-items: center;
     padding-bottom: 2px;
 }
+.theme {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 2px;
+}
 .prefix {
     display: flex;
     justify-content: space-between;
