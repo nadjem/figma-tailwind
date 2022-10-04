@@ -26,12 +26,12 @@ jobs:
       run: |
         npm install
         npx webpack --mode=production
-        
+        zip -r figmaXtailwind.zip *
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.FT_TOKEN }}"
+        automatic_release_tag: "latest"
+        title: "Release Build"
         prerelease: false
         files: |
-          *
-        
-        
+          figmaXtailwind.zip

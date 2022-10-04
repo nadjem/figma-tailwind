@@ -1,3 +1,4 @@
+[![Release](https://github.com/nadjemTkt/figma-tailwind/actions/workflows/webpack.yml/badge.svg?branch=master)](https://github.com/nadjemTkt/figma-tailwind/actions/workflows/webpack.yml)
 # Figma To Tailwind Config
 
 Based on https://github.com/jan-dh/figma-tailwindcss
