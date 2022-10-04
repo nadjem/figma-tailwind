@@ -36,7 +36,7 @@ jobs:
         files: |
           * |
           ./* |
-          ./dist |
-          ./node_module
+          ./dist/* |
+          ./node_module/*
         
         
