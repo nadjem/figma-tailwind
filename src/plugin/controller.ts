@@ -22,7 +22,6 @@ let config = {
 
 figma.ui.onmessage = (msg) => {
     if (msg.type === 'get-info') {
-        getAllData()
         const { finalSizes, finalFamilies } = getTextStyles()
         const { colors, gradientColors } = getPaintStyles()
         const { shadows } = getEffectStyles()
@@ -51,5 +50,11 @@ figma.ui.onmessage = (msg) => {
         setTimeout(() => {
             figma.closePlugin()
         }, 100)
+    } else if ('get-user') {
+        const user = figma.currentUser
+        figma.ui.postMessage({
+            type: 'get-user',
+            message: { result: user },
+        })
     }
 }
