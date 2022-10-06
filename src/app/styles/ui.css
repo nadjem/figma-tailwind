@@ -95,6 +95,18 @@ input:focus {
     align-items: center;
     padding-bottom: 2px;
 }
+
+.framework {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 2px;
+}
+
+.framework > label {
+    text-align: left;
+}
+
 .prefix {
     display: flex;
     justify-content: space-between;

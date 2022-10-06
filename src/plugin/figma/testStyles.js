@@ -4,14 +4,26 @@ export default function () {
     const gridStyles = figma.getLocalGridStyles()
     // const allData = figma.root.children
     const allPage = figma.root.children
+    let count = 1
 
+    console.log('allPage')
     allPage.map((page) => {
         if (page.name === 'component.scss') {
-            // console.log(page.name)
+            console.log('page', count)
+            count++
             let data = {}
             let name = ''
             let components = page.children.filter((p) => p.constructor.name === 'ComponentSetNode')[0]
-            components.children.map((component) => {
+            let childs = []
+            let childsName = []
+            components.children.forEach((child) => {
+                const name = child.name.split(',')[0].split('=')[1]
+                if (!childsName.includes(name)) {
+                    childsName.push(name)
+                    childs.push(child)
+                }
+            })
+            childs.map((component) => {
                 let configStr = component.name.replace(/"/g, '')
                 let config = configStr.split(',').map((c) => {
                     return c.trim()
@@ -20,8 +32,6 @@ export default function () {
                     c.split('=')
                     data[c.split('=')[0]] = c.split('=')[1]
                 })
-                // TODO voir avec Jerem le nomage des items:
-                //  - configuration ou nom du parent
 
                 // name = data.configuration
                 name = data.configuration
@@ -30,7 +40,8 @@ export default function () {
                 let i = ''
                 //console.log(data)
                 for (const item in data) {
-                    if (data[item] !== 'none' && data[item] !== 'enabled') {
+                    if (data[item] !== 'none' && data[item] !== 'enabled' && !item.includes('*')) {
+                        console.log(item)
                         if (data[item] !== data[component.parent.name.toLowerCase()]) {
                             if (item === 'icon') {
                                 i = `   i{
@@ -47,10 +58,10 @@ export default function () {
    @apply ${css};
     ${i}
 }\n`
+
                 alls.push(rule)
             })
         }
     })
-
     return { alls }
 }

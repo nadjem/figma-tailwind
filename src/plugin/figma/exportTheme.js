@@ -102,6 +102,7 @@ ${radius}
     }
   }`
     const zip = JSZip()
+    console.log({ data })
     data.theme[0].replaceAll('tkt', data.prefix)
     console.log('export theme')
     const blob2 = new Blob(data.theme, { type: 'text/plain;charset=utf-8' })
