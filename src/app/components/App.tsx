@@ -11,6 +11,7 @@ const App = ({}) => {
     const [prefixTxt, setPrefixTxt] = React.useState('tkt')
     const [pxTxt, setPxTxt] = React.useState('off')
     const [themeTxt, setThemeTxt] = React.useState('off')
+    const [frameworkTxt, setFrameworkTxt] = React.useState('')
     const [disabledAll, setDisabledALl] = React.useState(false)
     const prefix = React.useCallback((element: HTMLInputElement) => {
         if (element) textbox.current = element
@@ -25,6 +26,7 @@ const App = ({}) => {
                 themeTxt,
                 prefix,
                 px,
+                frameworkTxt,
             }
             setDisabledALl(true)
             parent.postMessage({ pluginMessage: { type: 'get-info', data } }, '*')
@@ -33,6 +35,9 @@ const App = ({}) => {
 
     const onCancel = () => {
         parent.postMessage({ pluginMessage: { type: 'close' } }, '*')
+    }
+    const onLaunch = () => {
+        parent.postMessage({ pluginMessage: { type: 'get-user' } }, '*')
     }
     const onExport = () => {
         if (themeTxt === 'on') {
@@ -52,6 +57,11 @@ const App = ({}) => {
         setThemeTxt(e.target.value)
     }
 
+    const handleFrameworkChange = (e) => {
+        console.log(e.target.value)
+        setFrameworkTxt(e.target.value)
+    }
+
     React.useEffect(() => {
         return () => {}
     }, [prefixTxt])
@@ -61,6 +71,7 @@ const App = ({}) => {
     }, [pxTxt])
 
     React.useEffect(() => {
+        onLaunch()
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
             const { type, message } = event.data.pluginMessage
@@ -70,6 +81,8 @@ const App = ({}) => {
                 setData(message.data)
             } else if (type === 'close') {
                 setReady(false)
+            } else if (type === 'get-user') {
+                console.log(message)
             }
         }
     }, [])
@@ -88,6 +101,18 @@ const App = ({}) => {
                 <div className={'theme'}>
                     <label htmlFor="theme">export theme ? </label>
                     <input disabled={disabledAll} id={'theme'} type="checkbox" onChange={handleThemeChange} />
+                </div>
+                <div className={'framework'}>
+                    <label htmlFor="framework-select">Framework:</label>
+
+                    <select name="framework" id="framework-select" onChange={(e) => handleFrameworkChange(e)}>
+                        <option value="">--Please choose an option--</option>
+                        <option value="Angular">Angular</option>
+                        <option value="React" disabled={true}>
+                            React
+                        </option>
+                        <option value="Vue">Vue</option>
+                    </select>
                 </div>
             </div>
 

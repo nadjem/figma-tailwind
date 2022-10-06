@@ -12,7 +12,6 @@ module.exports = (env, argv) => ({
     ui: './src/app/index.tsx', // The entry point for your UI code
     code: './src/plugin/controller.ts', // The entry point for your plugin code
   },
-
   module: {
     rules: [
       // Converts TypeScript code to JavaScript
