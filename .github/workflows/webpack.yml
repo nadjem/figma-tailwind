@@ -36,8 +36,8 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.FT_TOKEN }}"
-        automatic_release_tag: "v-${steps.package-version.outputs.current-version}.${env.hash}"
-        title: "Release v-${steps.package-version.outputs.current-version}.${SHORT_SHA}"
+        automatic_release_tag: "v-${{steps.package-version.outputs.current-version}}.${{SHORT_SHA}}"
+        title: "Release v-${{steps.package-version.outputs.current-version}}.${{SHORT_SHA}}"
         prerelease: false
         files: |
           figmaXtailwind.zip
