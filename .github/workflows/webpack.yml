@@ -30,14 +30,14 @@ jobs:
     - name: get-npm-version
       id: package-version
       uses: martinbeentjes/npm-get-version-action@main
-    - name: Get Hash
-      id: hash
-      run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV  
+    - name: Set outputs
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"  
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.FT_TOKEN }}"
-        automatic_release_tag: "v-${{steps.package-version.outputs.current-version}}.${{SHORT_SHA}}"
-        title: "Release v-${{steps.package-version.outputs.current-version}}.${{SHORT_SHA}}"
+        automatic_release_tag: "v-${{steps.package-version.outputs.current-version}}.${{steps.vars.outputs.sha_short}}"
+        title: "Release v-${{steps.package-version.outputs.current-version}}.${{steps.vars.outputs.sha_short}}"
         prerelease: false
         files: |
           figmaXtailwind.zip
