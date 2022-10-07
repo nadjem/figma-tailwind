@@ -3,7 +3,7 @@ import getTextStyles from './figma/textStyles'
 import getPaintStyles from './figma/paintStyles'
 import getEffectStyles from './figma/effectStyles'
 import getRadiusStyle from './figma/radiusStyles'
-import getAllData from './figma/testStyles'
+import getAllData from './figma/themeStyles'
 
 figma.showUI(__html__)
 
