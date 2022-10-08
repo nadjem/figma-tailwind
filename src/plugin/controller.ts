@@ -3,16 +3,18 @@ import getTextStyles from './figma/textStyles'
 import getPaintStyles from './figma/paintStyles'
 import getEffectStyles from './figma/effectStyles'
 import getRadiusStyle from './figma/radiusStyles'
-import getAllData from './figma/testStyles'
+import getAllData from './figma/themeStyles'
 
 figma.showUI(__html__)
 
 let config = {
     project: '',
     prefix: '',
+    framework: '',
     px: '',
     theme: '',
     colors: [],
+    themeClasses: [],
     gradientColors: [],
     fontSize: [],
     fontFamily: [],
@@ -22,15 +24,18 @@ let config = {
 
 figma.ui.onmessage = (msg) => {
     if (msg.type === 'get-info') {
+        console.log(msg.data)
         const { finalSizes, finalFamilies } = getTextStyles()
         const { colors, gradientColors } = getPaintStyles()
         const { shadows } = getEffectStyles()
         const { radius } = getRadiusStyle()
-        const { alls } = getAllData()
+        const { alls, allsClassName } = getAllData()
         config.project = figma.root.name
         config.prefix = msg.data.prefix
         config.px = msg.data.px
+        config.framework = msg.data.frameworkTxt
         config.theme = alls
+        config.themeClasses = allsClassName
         config.fontSize.push(...finalSizes)
         config.fontFamily.push(...finalFamilies)
         config.colors.push(...colors)

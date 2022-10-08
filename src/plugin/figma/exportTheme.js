@@ -1,5 +1,6 @@
 import { saveAs } from 'file-saver'
 import * as JSZip from 'jszip'
+import templates from './templates'
 
 export default async function (data) {
     let fonts = ''
@@ -102,18 +103,36 @@ ${radius}
     }
   }`
     const zip = JSZip()
-    console.log({ data })
     data.theme[0].replaceAll('tkt', data.prefix)
-    console.log('export theme')
-    const blob2 = new Blob(data.theme, { type: 'text/plain;charset=utf-8' })
+    const theme = new Blob(data.theme, { type: 'text/plain;charset=utf-8' })
+    const config = new Blob([base], { type: 'text/plain;charset=utf-8' })
+    if (data.framework) {
+        templates(data.framework, data.prefix).then((frameworks) => {
+            console.log({ frameworks })
+            frameworks.forEach((framework, index) => {
+                console.log({ framework })
+                const blob = new Blob([framework.content], { type: 'text/plain;charset=utf-8' })
+                zip.file(framework.title, blob)
+                if (index === frameworks.length - 1) {
+                    zip.file('config/tailwind.config.js', config)
+                    zip.file(`theme/theme-${data.prefix}.scss`, theme)
 
-    const blob = new Blob([base], { type: 'text/plain;charset=utf-8' })
-    zip.file('config/tailwind.config.js', blob)
-    zip.file(`theme/theme-${data.prefix}.scss`, blob2)
+                    zip.generateAsync({ type: 'blob' }).then(function (content) {
+                        // see FileSaver.js
+                        // saveAs(content, "example.zip");
+                        saveAs(content, `${data.prefix}-figma.zip`)
+                    })
+                }
+            })
+        })
+    } else {
+        zip.file('config/tailwind.config.js', config)
+        zip.file(`theme/theme-${data.prefix}.scss`, theme)
 
-    zip.generateAsync({ type: 'blob' }).then(function (content) {
-        // see FileSaver.js
-        // saveAs(content, "example.zip");
-        saveAs(content, `${data.prefix}-figma.zip`)
-    })
+        zip.generateAsync({ type: 'blob' }).then(function (content) {
+            // see FileSaver.js
+            // saveAs(content, "example.zip");
+            saveAs(content, `${data.prefix}-figma.zip`)
+        })
+    }
 }
