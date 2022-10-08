@@ -74,15 +74,17 @@ const App = ({}) => {
         onLaunch()
         // This is how we read messages sent from the plugin controller
         window.onmessage = (event) => {
-            const { type, message } = event.data.pluginMessage
-            if (type === 'get-info') {
-                setShowLoader(false)
-                setReady(true)
-                setData(message.data)
-            } else if (type === 'close') {
-                setReady(false)
-            } else if (type === 'get-user') {
-                console.log(message)
+            if (event.data.pluginMessage) {
+                const { type, message } = event.data.pluginMessage
+                if (type === 'get-info') {
+                    setShowLoader(false)
+                    setReady(true)
+                    setData(message.data)
+                } else if (type === 'close') {
+                    setReady(false)
+                } else if (type === 'get-user') {
+                    // console.log(message);
+                }
             }
         }
     }, [])

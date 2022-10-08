@@ -1,6 +1,6 @@
 export default function () {
     const radius = []
-    const allData = figma.currentPage.findAll()
+    const allData = figma.root.children.filter((page) => page.name === 'tailwind.config.js')[0].children
 
     /**
      * get radius
