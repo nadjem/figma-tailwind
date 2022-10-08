@@ -1,28 +1,21 @@
 export default function () {
     const alls = []
-    const dropshadow = figma.getLocalEffectStyles()
-    const gridStyles = figma.getLocalGridStyles()
-    // const allData = figma.root.children
+    const allsClassName = []
     const allPage = figma.root.children
     let count = 1
     allPage.map((page) => {
-        // console.log(page.children.filter((p) => p.constructor.name === 'ComponentSetNode')) // all component
         if (page.name === 'component.scss') {
             count++
-
             page.children
                 .filter((p) => p.constructor.name === 'ComponentSetNode')
                 .forEach((components) => {
                     let data = {}
                     let name = ''
-                    //let components = page.children.filter((p) => p.constructor.name === 'ComponentSetNode')[0] // only button
                     let childs = []
                     let childsName = []
                     let css = ''
                     components.children.forEach((child) => {
                         const name = child.name.split(',')[0].split('=')[1]
-                        console.log(childsName.includes(name))
-                        console.log(name)
                         if (!childsName.includes(name)) {
                             childsName.push(name)
                             childs.push(child)
@@ -60,10 +53,11 @@ export default function () {
     ${i}
 }\n`
                             alls.push(rule)
+                            allsClassName.push(`${component.parent.name.toLowerCase()}-${name.toLowerCase()}`)
                         }
                     })
                 })
         }
     })
-    return { alls }
+    return { alls, allsClassName }
 }
