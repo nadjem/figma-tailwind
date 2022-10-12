@@ -22,6 +22,8 @@ export default function () {
                         }
                     })
                     childs.map((component) => {
+                        console.log(component)
+                        css = ''
                         let configStr = component.name.replace(/"/g, '')
                         let config = configStr.split(',').map((c) => {
                             return c.trim()
