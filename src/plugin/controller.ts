@@ -6,7 +6,7 @@ import getRadiusStyle from './figma/radiusStyles'
 import getAllData from './figma/themeStyles'
 
 figma.showUI(__html__)
-
+figma.ui.resize(400, 300)
 let config = {
     project: '',
     prefix: '',

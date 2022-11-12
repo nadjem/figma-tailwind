@@ -128,7 +128,9 @@ const App = ({}) => {
                         export
                     </button>
                 )}
-                <button onClick={onCancel}>Cancel</button>
+                <button className={'close'} onClick={onCancel}>
+                    Cancel
+                </button>
             </div>
 
             {showLoader ? (
