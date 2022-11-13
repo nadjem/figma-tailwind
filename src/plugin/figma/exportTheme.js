@@ -103,14 +103,15 @@ ${radius}
     }
   }`
     const zip = JSZip()
-    data.theme[0].replaceAll('tkt', data.prefix)
-    const theme = new Blob(data.theme, { type: 'text/plain;charset=utf-8' })
+    let theme
+    if (data.theme[0]) {
+        data.theme[0].replaceAll('tkt', data.prefix)
+        theme = new Blob(data.theme, { type: 'text/plain;charset=utf-8' })
+    }
     const config = new Blob([base], { type: 'text/plain;charset=utf-8' })
     if (data.framework) {
         templates(data.framework, data.prefix).then((frameworks) => {
-            console.log({ frameworks })
             frameworks.forEach((framework, index) => {
-                console.log({ framework })
                 const blob = new Blob([framework.content], { type: 'text/plain;charset=utf-8' })
                 zip.file(framework.title, blob)
                 if (index === frameworks.length - 1) {

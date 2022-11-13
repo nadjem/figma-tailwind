@@ -4,7 +4,10 @@ export default function () {
     allPage.forEach((page) => {
         if (page.name === 'component.scss') {
             getComponent(page.children).then((component) => {
-                console.log(component)
+                console.log({ component })
+                component.forEach((child) => {
+                    console.log(child)
+                })
             })
         }
     })
