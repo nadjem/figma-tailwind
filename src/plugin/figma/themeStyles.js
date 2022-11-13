@@ -1,4 +1,5 @@
-export default function () {
+export default function (data) {
+    const dataTheme = data
     const alls = []
     const allsClassName = []
     const allPage = figma.root.children
@@ -14,6 +15,7 @@ export default function () {
                     let childs = []
                     let childsName = []
                     let css = ''
+                    let dynamicTextStyle = ''
                     components.children.forEach((child) => {
                         const name = child.name.split(',')[0].split('=')[1]
                         if (!childsName.includes(name)) {
@@ -22,7 +24,31 @@ export default function () {
                         }
                     })
                     childs.map((component) => {
-                        console.log(component)
+                        let textChild = component.children.filter((c) => c.constructor.name === 'TextNode')[0]
+                        if (textChild) {
+                            let styleColors = getStyleById(textChild.fillStyleId)
+                            let styleTexts = getStyleById(textChild.textStyleId)
+                            if (styleTexts) {
+                                dynamicTextStyle = `font-${dataTheme.prefix}-${styleTexts.fontName.family
+                                    .toLowerCase()
+                                    .replace(' ', '-')}`
+                                dynamicTextStyle += ` text-[${styleTexts.fontSize}px]`
+                                dynamicTextStyle += ` font-${styleTexts.fontName.style.toLowerCase()}`
+                                dynamicTextStyle += ` text-${dataTheme.prefix}-${styleColors.name.replace('/', '-')}`
+                                dynamicTextStyle += ` ${
+                                    textChild.textCase === 'ORIGINAL' ? 'normal-case' : 'uppercase'
+                                }`
+                                dynamicTextStyle += ` text-${textChild.textAlignHorizontal.toLowerCase()}`
+                                if (styleTexts.lineHeight.value) {
+                                    dynamicTextStyle += ` {leading-${styleTexts.lineHeight.value}}`
+                                }
+                                if (styleTexts.letterSpacing.value) {
+                                    dynamicTextStyle += ` tracking-${styleTexts.letterSpacing.value}`
+                                }
+                            } else {
+                                /*console.log({styleTexts})*/
+                            }
+                        }
                         css = ''
                         let configStr = component.name.replace(/"/g, '')
                         let config = configStr.split(',').map((c) => {
@@ -34,12 +60,15 @@ export default function () {
                         })
                         name = data.configuration
                         delete data.configuration
+                        console.log({ name })
                         if (name) {
                             let i = ''
                             for (const item in data) {
                                 if (data[item] !== 'none' && data[item] !== 'enabled' && !item.includes('*')) {
                                     if (data[item] !== data[component.parent.name.toLowerCase()]) {
                                         if (item === 'icon') {
+                                            console.log({ icon: item })
+
                                             i = `   i{
          @apply ${data[item]};
         }`
@@ -51,9 +80,11 @@ export default function () {
                             }
                             let rule = `
 .${component.parent.name.toLowerCase()}-${name.toLowerCase()}{
-   @apply ${css};
+   @apply ${css} ${dynamicTextStyle};
     ${i}
 }\n`
+                            dynamicTextStyle = ''
+                            console.log({ rule })
                             alls.push(rule)
                             allsClassName.push(`${component.parent.name.toLowerCase()}-${name.toLowerCase()}`)
                         }
@@ -61,5 +92,10 @@ export default function () {
                 })
         }
     })
+    console.log(allsClassName)
     return { alls, allsClassName }
+}
+
+const getStyleById = (styleId) => {
+    return figma.getStyleById(styleId)
 }

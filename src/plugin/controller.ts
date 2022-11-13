@@ -6,7 +6,7 @@ import getRadiusStyle from './figma/radiusStyles'
 import getAllData from './figma/themeStyles'
 
 figma.showUI(__html__)
-
+figma.ui.resize(350, 300)
 let config = {
     project: '',
     prefix: '',
@@ -24,12 +24,11 @@ let config = {
 
 figma.ui.onmessage = (msg) => {
     if (msg.type === 'get-info') {
-        console.log(msg.data)
         const { finalSizes, finalFamilies } = getTextStyles()
         const { colors, gradientColors } = getPaintStyles()
         const { shadows } = getEffectStyles()
         const { radius } = getRadiusStyle()
-        const { alls, allsClassName } = getAllData()
+        const { alls, allsClassName } = getAllData(msg.data)
         config.project = figma.root.name
         config.prefix = msg.data.prefix
         config.px = msg.data.px
