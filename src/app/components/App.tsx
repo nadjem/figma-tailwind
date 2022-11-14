@@ -1,4 +1,7 @@
 import * as React from 'react'
+// import 'materialize-css/dist/css/materialize.min.css';
+// import 'materialize-css/dist/js/materialize';
+// import 'material-icons/iconfont/material-icons.css'
 import '../styles/ui.css'
 import exporter from '../../plugin/figma/exportFile'
 import makeTHeme from '../../plugin/figma/exportTheme'
@@ -107,7 +110,12 @@ const App = ({}) => {
                 <div className={'framework'}>
                     <label htmlFor="framework-select">Framework:</label>
 
-                    <select name="framework" id="framework-select" onChange={(e) => handleFrameworkChange(e)}>
+                    <select
+                        name="framework"
+                        id="framework-select"
+                        className={'input-field col s12'}
+                        onChange={(e) => handleFrameworkChange(e)}
+                    >
                         <option value="">--Please choose an option--</option>
                         <option value="Angular">Angular</option>
                         <option value="React" disabled={true}>
